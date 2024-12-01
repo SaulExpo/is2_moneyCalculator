@@ -1,7 +1,7 @@
-package ulpgc.es.architecture.control;
+package ulpgc.es.control;
 
 
-import ulpgc.es.architecture.model.Currency;
+import ulpgc.es.model.Currency;
 
 public interface CurrencyDeserializer {
     Currency deserialize(String value);

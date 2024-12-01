@@ -1,4 +1,4 @@
-package ulpgc.es.architecture.model;
+package ulpgc.es.model;
 
 public record Money(double amount, Currency currency) {
 }

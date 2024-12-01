@@ -1,6 +1,6 @@
-package ulpgc.es.architecture.persistence;
+package ulpgc.es.persistence;
 
-import ulpgc.es.architecture.model.Currency;
+import ulpgc.es.model.Currency;
 
 import java.util.List;
 

@@ -1,15 +1,12 @@
-package ulpgc.es.architecture.control;
+package ulpgc.es.control;
 
-import ulpgc.es.architecture.model.Currency;
-import ulpgc.es.architecture.model.ExchangeRate;
+import ulpgc.es.model.Currency;
+import ulpgc.es.model.ExchangeRate;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 public class CsvExchangeRateDeserializer implements ExchangeRateDeserializer {
     private Currency to;
@@ -26,7 +23,9 @@ public class CsvExchangeRateDeserializer implements ExchangeRateDeserializer {
                 to = c;
             }
         }
+        if (to == null){
+            return null;
+        }
         return new ExchangeRate(from, to, Double.parseDouble(columns[3]), LocalDate.parse(columns[4], formatter));
-
     }
 }
