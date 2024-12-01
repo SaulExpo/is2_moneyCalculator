@@ -1,32 +1,35 @@
 package ulpgc.es.architecture.control;
 
-
 import ulpgc.es.architecture.model.Currency;
+import ulpgc.es.architecture.model.ExchangeRate;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Iterator;
+import java.util.List;
 
-public class CsvCurrecyReader implements CurrencyReader {
+public class CsvExchangeRateReader implements ExchangeRateReader{
     private final File source;
-    private final CsvCurrencyDeserializer deserializer;
+    private final CsvExchangeRateDeserializer deserializer;
+    private final List<Currency> currencies;
 
-    public CsvCurrecyReader(File source) {
+    public CsvExchangeRateReader(File source, List<Currency> currencies) {
         this.source = source;
-        this.deserializer = new CsvCurrencyDeserializer();
+        this.deserializer = new CsvExchangeRateDeserializer();
+        this.currencies = currencies;
     }
 
     @Override
-    public Iterator<Currency> read() throws IOException {
+    public Iterator<ExchangeRate> read() throws IOException {
         BufferedReader reader = new BufferedReader(new FileReader(source));
         readHeadersWith(reader);
-        return readCurrencyWith(reader);
+        return readRateWith(reader);
     }
 
-    private Iterator<Currency> readCurrencyWith(BufferedReader reader) throws IOException {
-        return new Iterator<Currency>() {
+    private Iterator<ExchangeRate> readRateWith(BufferedReader reader) throws IOException {
+        return new Iterator<ExchangeRate>() {
             String line = reader.readLine();
             @Override
             public boolean hasNext() {
@@ -34,12 +37,12 @@ public class CsvCurrecyReader implements CurrencyReader {
             }
 
             @Override
-            public Currency next() {
+            public ExchangeRate next() {
                 try {
-                    Currency currency = line == null ? null : currencyOf(line);
+                    ExchangeRate exchangeRate = line == null ? null : rateOf(line);
                     line = reader.readLine();
                     if (line == null) reader.close();
-                    return currency;
+                    return exchangeRate;
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
@@ -48,8 +51,8 @@ public class CsvCurrecyReader implements CurrencyReader {
 
     }
 
-    private Currency currencyOf(String line) {
-        return deserializer.deserialize(line);
+    private ExchangeRate rateOf(String line) {
+        return deserializer.deserialize(line, currencies);
     }
 
     private static void readHeadersWith(BufferedReader reader) throws IOException {
